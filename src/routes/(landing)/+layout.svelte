@@ -5,9 +5,17 @@
 	import { APP_NAME } from '$lib';
 
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
+	let y: number = $state(0);
+	$inspect(y);
 </script>
 
-<nav class="bg-white antialiased dark:bg-gray-800">
+<svelte:window bind:scrollY={y} />
+
+<nav
+	class="fixed left-0 top-0 w-full antialiased{y < 30
+		? ' dark bg-transparent'
+		: ' bg-white dark:bg-gray-800'}"
+>
 	<div class="mx-auto max-w-screen-xl px-4 py-4 2xl:px-0">
 		<div class="flex items-center justify-between">
 			<div class="flex items-center space-x-8">
