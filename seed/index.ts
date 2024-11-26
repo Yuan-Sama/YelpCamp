@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import cities from './cities.js';
 import { places, descriptors } from './seedHelpers.js';
-import { Campground } from '../src/lib/server/mongo/model';
+import { Campground } from '../src/lib/server/campground/campground.model';
 
 (async () => {
 	try {

@@ -1,4 +1,4 @@
-import { Campground } from '$lib/server/mongo/model';
+import { Campground } from '$lib/server/campground/campground.model';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {

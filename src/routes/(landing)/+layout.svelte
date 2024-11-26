@@ -30,7 +30,7 @@
 						<a
 							href="/"
 							title="Home"
-							class="hover:text-primary-700 dark:hover:text-primary-500 flex text-sm font-medium text-gray-900 dark:text-white"
+							class="flex text-sm font-medium text-primary-700 dark:text-primary-500"
 						>
 							Home
 						</a>
@@ -39,7 +39,7 @@
 						<a
 							href="/campgrounds"
 							title="Campgrounds"
-							class="hover:text-primary-700 dark:hover:text-primary-500 flex text-sm font-medium text-gray-900 dark:text-white"
+							class="flex text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500"
 						>
 							Campgrounds
 						</a>
@@ -75,7 +75,7 @@
 
 {@render children()}
 
-<footer class="bg-white p-4 md:p-8 lg:p-10 dark:bg-gray-800">
+<footer class="bg-white p-4 dark:bg-gray-800 md:p-8 lg:p-10">
 	<div class="mx-auto max-w-screen-xl text-center">
 		<a
 			href="/"
@@ -96,7 +96,7 @@
 				<a href="/campgrounds" class="mr-4 hover:underline md:mr-6">Campgrounds</a>
 			</li>
 		</ul>
-		<span class="text-sm text-gray-500 sm:text-center dark:text-gray-400"
+		<span class="text-sm text-gray-500 dark:text-gray-400 sm:text-center"
 			>© {new Date().getFullYear()} <a href="/" class="hover:underline">{APP_NAME}</a>. All Rights
 			Reserved.</span
 		>
