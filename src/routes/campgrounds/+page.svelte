@@ -105,7 +105,7 @@
 						{formatAsCurrency(Number(campground.price))}/night
 					</p>
 
-					<p class="mb-3 mt-1 text-gray-500 dark:text-neutral-400">
+					<p class="mb-3 mt-1 break-words text-gray-500 dark:text-neutral-400">
 						{readMore(campground.description, 100)}
 					</p>
 

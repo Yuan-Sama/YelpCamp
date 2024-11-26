@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Modal from '$components/Modal.svelte';
-	import { formatAsCurrency } from '$lib';
+	import { APP_NAME, formatAsCurrency } from '$lib';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>Yelp Camp - Campground: {campground.title}</title>
+	<title>{APP_NAME} - Campground: {campground.title}</title>
 </svelte:head>
 
 <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
@@ -157,7 +157,7 @@
 	</div>
 </div>
 
-<Modal bind:showModal={showDialog} class="relative h-full w-full max-w-md p-4 md:h-auto z-50">
+<Modal bind:showModal={showDialog} class="relative z-50 h-full w-full max-w-md p-4 md:h-auto">
 	<div class="relative rounded-lg bg-white p-4 text-center shadow dark:bg-gray-800 sm:p-5">
 		<!-- Modal content -->
 		<button
