@@ -1,25 +1,32 @@
 import Joi from 'joi';
-import mongoose, { Model, model, Schema } from 'mongoose';
+import mongoose, { Model, model, Schema, type ObjectId } from 'mongoose';
 
-interface ICampground {
+interface Campground {
 	title: string;
-	price: string;
+	price: number;
 	description: string;
 	location: string;
 	image: string;
+	reviews: Array<ObjectId>;
 }
 
-const campgroundSchema = new Schema<ICampground>({
+const campgroundSchema = new Schema<Campground>({
 	title: { type: String },
-	price: { type: String },
+	price: { type: Number },
 	description: { type: String },
 	location: { type: String },
-	image: { type: String }
+	image: { type: String },
+	reviews: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: 'Review'
+		}
+	]
 });
 
-export const Campground =
-	(mongoose.models['Campground'] as Model<ICampground>) ||
-	model<ICampground>('Campground', campgroundSchema);
+export const CampgroundMongoModel =
+	(mongoose.models['Campground'] as Model<Campground>) ||
+	model<Campground>('Campground', campgroundSchema);
 
 export const campgroundRequestValidator = Joi.object({
 	title: Joi.string().required(),

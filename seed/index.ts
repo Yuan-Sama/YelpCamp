@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import cities from './cities.js';
 import { places, descriptors } from './seedHelpers.js';
-import { Campground } from '../src/lib/server/campground/campground.model';
+import { CampgroundMongoModel } from '../src/lib/server/campground/campground.model';
 
 (async () => {
 	try {
@@ -15,11 +15,11 @@ import { Campground } from '../src/lib/server/campground/campground.model';
 const sample = (/**@type {string[]} */ array) => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
-	await Campground.deleteMany({});
+	await CampgroundMongoModel.deleteMany({});
 	for (let i = 0; i < 50; i++) {
 		const random1000 = Math.floor(Math.random() * 1000);
 		const price = Math.floor(Math.random() * 20) + 10;
-		const camp = new Campground({
+		const camp = new CampgroundMongoModel({
 			// @ts-ignore
 			location: `${cities[random1000].city}, ${cities[random1000].state}`,
 			title: `${sample(descriptors)} ${sample(places)}`,

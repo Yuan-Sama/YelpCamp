@@ -1,6 +1,9 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import { Campground, campgroundRequestValidator } from '$lib/server/campground/campground.model';
+import {
+	CampgroundMongoModel,
+	campgroundRequestValidator
+} from '$lib/server/campground/campground.model';
 
 export const actions = {
 	default: async ({ request }) => {
@@ -30,7 +33,7 @@ export const actions = {
 			return fail(400, { errors });
 		}
 
-		const campground = new Campground(newCampground);
+		const campground = new CampgroundMongoModel(newCampground);
 		await campground.save();
 		redirect(303, `/campgrounds/${campground._id}`);
 	}
