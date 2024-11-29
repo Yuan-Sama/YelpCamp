@@ -1,14 +1,10 @@
 import Joi from 'joi';
 import mongoose, { model, Model, Schema } from 'mongoose';
 
-interface Review {
-	body: string;
-	rating: number;
-}
-
 const reviewSchema = new Schema<Review>({
 	body: { type: String },
-	rating: { type: Number }
+	rating: { type: Number },
+	createdDate: { type: Date, default: Date.now }
 });
 
 export const ReviewMongoModel =

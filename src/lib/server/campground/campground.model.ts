@@ -1,14 +1,5 @@
 import Joi from 'joi';
-import mongoose, { Model, model, Schema, type ObjectId } from 'mongoose';
-
-interface Campground {
-	title: string;
-	price: number;
-	description: string;
-	location: string;
-	image: string;
-	reviews: Array<ObjectId>;
-}
+import mongoose, { Model, model, Schema } from 'mongoose';
 
 const campgroundSchema = new Schema<Campground>({
 	title: { type: String },

@@ -2,9 +2,26 @@ import {
 	CampgroundMongoModel,
 	campgroundRequestValidator
 } from '$lib/server/campground/campground.model';
-import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import { error, fail, redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 import { convertToValidationErrors } from '$lib/server';
+
+export const load = (async ({ params }) => {
+	const campground = await CampgroundMongoModel.findById(params.id, {
+		_id: { $toString: '$_id' },
+		title: 1,
+		price: 1,
+		description: 1,
+		image: 1,
+		location: 1
+	}).lean();
+
+	if (!campground) error(404, { message: 'Campground not found' });
+
+	return {
+		campground
+	};
+}) satisfies PageServerLoad;
 
 export const actions = {
 	default: async ({ request, params }) => {

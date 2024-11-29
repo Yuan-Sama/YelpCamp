@@ -2,6 +2,13 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@layer base {
+	textarea,
+	input {
+		@apply focus:outline-none focus:ring-[1px];
+	}
+}
+
 @layer utilities {
 	.form-control.is-valid,
 	.was-validated .form-control:valid {

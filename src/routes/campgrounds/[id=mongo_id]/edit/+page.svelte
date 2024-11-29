@@ -41,7 +41,7 @@
 					<input
 						type="text"
 						id="title"
-						class="form-control block w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-[1px] focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+						class="form-control block w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
 						placeholder="Title"
 						value={form?.errors['title'].submittedValue ?? campground.title}
 						name="title"
@@ -58,7 +58,7 @@
 					<input
 						type="text"
 						id="location"
-						class="form-control block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-[1px] focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+						class="form-control block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
 						placeholder="Location"
 						value={form?.errors['location'].submittedValue ?? campground.location}
 						name="location"
@@ -75,7 +75,7 @@
 					<input
 						type="text"
 						id="image"
-						class="form-control block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-[1px] focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+						class="form-control block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
 						placeholder="https://your.image.png"
 						value={form?.errors['image'].submittedValue ?? campground.image}
 						name="image"
@@ -95,7 +95,7 @@
 						<input
 							type="text"
 							id="price"
-							class="form-control block w-[1%] min-w-0 flex-auto rounded-e-lg border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-[1px] focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+							class="form-control block w-[1%] min-w-0 flex-auto rounded-e-lg border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
 							placeholder="$0.00"
 							value={form?.errors['price'].error
 								? form?.errors['price'].submittedValue
@@ -119,7 +119,7 @@
 							id="description"
 							name="description"
 							rows="5"
-							class="form-control block w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-[1px] focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+							class="form-control block w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
 							placeholder="Leave your description here..."
 							required
 							>{form?.errors['description'].submittedValue ?? campground.description}</textarea
@@ -132,9 +132,9 @@
 				<div class="mt-6 flex justify-between gap-10">
 					<a
 						class="inline-flex w-full items-center justify-center gap-x-2 rounded-lg border border-transparent bg-red-600 px-4 py-3 text-sm font-medium text-white hover:bg-red-700 focus:bg-red-700 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-						href="/campgrounds"
+						href="/campgrounds/{campground._id}"
 					>
-						Back to Campgrounds
+						Cancel
 					</a>
 					<button
 						type="submit"

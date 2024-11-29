@@ -1,7 +1,7 @@
 import type { Types } from 'mongoose';
 
 export async function submitReview(
-	campgroundId: Types.ObjectId & string,
+	campgroundId: Types.ObjectId | string,
 	review: { body: string; rating: number }
 ) {
 	const response = await fetch(`/api/campgrounds/${campgroundId}/reviews`, {
@@ -10,6 +10,7 @@ export async function submitReview(
 	});
 
 	if (!response.ok) {
-		console.log(await response.json());
+		return [];
 	}
+	return response.json();
 }

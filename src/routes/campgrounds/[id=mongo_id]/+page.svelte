@@ -8,14 +8,22 @@
 	const { campground } = data;
 
 	let showDialog = $state(false);
+	let body: string = $state('');
+	let rating: number = $state(1);
+	let reviews: { _id: string; body: string; rating: number; createdDate: Date }[] = $state(
+		campground.reviews
+	);
 
 	async function onsubmit($event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
 		$event.stopPropagation();
 		$event.preventDefault();
-		await submitReview(campground._id, {
-			body: '',
-			rating: 5
+		reviews = await submitReview(campground._id, {
+			body,
+			rating
 		});
+
+		body = '';
+		rating = 1;
 	}
 </script>
 
@@ -166,10 +174,45 @@
 	</div>
 
 	<div class="mx-auto mt-10 max-w-screen-md px-4 2xl:px-0">
+		<div class="gap-3 pb-6 sm:flex sm:items-start">
+			<h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Leaving a review</h2>
+		</div>
 		<form onsubmit={(e) => onsubmit(e)}>
 			<div class="mb-4 grid grid-cols-2 gap-4">
 				<div class="col-span-2">
-					<div class="flex items-center">
+					<div class="relative mb-6">
+						<label
+							for="review-rating"
+							class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Rating</label
+						>
+						<input
+							id="review-rating"
+							type="range"
+							min="1"
+							max="5"
+							bind:value={rating}
+							class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 dark:bg-gray-700"
+						/>
+						<span class="absolute -bottom-6 start-0 text-sm text-gray-500 dark:text-gray-400"
+							>1</span
+						>
+						<span
+							class="absolute -bottom-6 start-1/4 -translate-x-1/2 text-sm text-gray-500 dark:text-gray-400 rtl:translate-x-1/2"
+							>2</span
+						>
+						<span
+							class="absolute -bottom-6 start-2/4 -translate-x-1/2 text-sm text-gray-500 dark:text-gray-400 rtl:translate-x-1/2"
+							>3</span
+						>
+						<span
+							class="absolute -bottom-6 start-3/4 -translate-x-1/2 text-sm text-gray-500 dark:text-gray-400 rtl:translate-x-1/2"
+							>4</span
+						>
+						<span class="absolute -bottom-6 end-0 text-sm text-gray-500 dark:text-gray-400">5</span>
+					</div>
+
+					<!-- TODO: implement hover review star -->
+					<!-- <div class="flex items-center">
 						<svg
 							class="h-6 w-6 text-yellow-300"
 							aria-hidden="true"
@@ -215,7 +258,7 @@
 							/>
 						</svg>
 						<svg
-							class="ms-2 h-6 w-6 text-gray-300 dark:text-gray-500"
+							class="ms-2 h-6 w-6 text-gray-300 hover:text-yellow-300 dark:text-gray-500 dark:hover:text-yellow-300"
 							aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="currentColor"
@@ -226,18 +269,19 @@
 							/>
 						</svg>
 						<span class="ms-2 text-lg font-bold text-gray-900 dark:text-white">3.0 out of 5</span>
-					</div>
+					</div> -->
 				</div>
 				<div class="col-span-2">
 					<label
-						for="description"
-						class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-						>Review description</label
+						for="review-body"
+						class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Review</label
 					>
 					<textarea
-						id="description"
+						id="review-body"
 						rows="6"
 						class="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+						bind:value={body}
+						required
 					></textarea>
 				</div>
 			</div>
@@ -245,197 +289,126 @@
 				<button
 					type="submit"
 					class="me-2 inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-					>Add review</button
+					>Submit</button
 				>
 			</div>
 		</form>
 	</div>
 
-	<div class="mt-10 divide-y divide-gray-200 dark:divide-gray-700">
-		<div class="gap-3 pb-6 sm:flex sm:items-start">
-			<h2 class="text-2xl font-semibold text-gray-900 dark:text-white" id="reviews">Reviews</h2>
-		</div>
+	<div class="mt-10 divide-y divide-gray-200 dark:divide-gray-700" id="reviews">
+		{#each $state.snapshot(reviews) as review}
+			<div class="gap-3 py-6 sm:flex sm:items-start">
+				<div class="shrink-0 space-y-2 sm:w-48 md:w-72">
+					<!-- <div class="flex items-center gap-0.5">
+							 <svg
+								 class="h-4 w-4 text-yellow-300"
+								 aria-hidden="true"
+								 xmlns="http://www.w3.org/2000/svg"
+								 width="24"
+								 height="24"
+								 fill="currentColor"
+								 viewBox="0 0 24 24"
+							 >
+								 <path
+									 d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
+								 />
+							 </svg>
+		 
+							 <svg
+								 class="h-4 w-4 text-yellow-300"
+								 aria-hidden="true"
+								 xmlns="http://www.w3.org/2000/svg"
+								 width="24"
+								 height="24"
+								 fill="currentColor"
+								 viewBox="0 0 24 24"
+							 >
+								 <path
+									 d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
+								 />
+							 </svg>
+		 
+							 <svg
+								 class="h-4 w-4 text-yellow-300"
+								 aria-hidden="true"
+								 xmlns="http://www.w3.org/2000/svg"
+								 width="24"
+								 height="24"
+								 fill="currentColor"
+								 viewBox="0 0 24 24"
+							 >
+								 <path
+									 d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
+								 />
+							 </svg>
+		 
+							 <svg
+								 class="h-4 w-4 text-yellow-300"
+								 aria-hidden="true"
+								 xmlns="http://www.w3.org/2000/svg"
+								 width="24"
+								 height="24"
+								 fill="currentColor"
+								 viewBox="0 0 24 24"
+							 >
+								 <path
+									 d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
+								 />
+							 </svg>
+		 
+							 <svg
+								 class="h-4 w-4 text-yellow-300"
+								 aria-hidden="true"
+								 xmlns="http://www.w3.org/2000/svg"
+								 width="24"
+								 height="24"
+								 fill="currentColor"
+								 viewBox="0 0 24 24"
+							 >
+								 <path
+									 d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
+								 />
+							 </svg>
+						 </div> -->
+					<div class="flex items-center gap-0.5">
+						{review.rating}
+						<svg
+							class="h-4 w-4 text-yellow-300"
+							aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							fill="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
+							/>
+						</svg>
+					</div>
 
-		<div class="gap-3 py-6 sm:flex sm:items-start">
-			<div class="shrink-0 space-y-2 sm:w-48 md:w-72">
-				<div class="flex items-center gap-0.5">
-					<svg
-						class="h-4 w-4 text-yellow-300"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-						/>
-					</svg>
-
-					<svg
-						class="h-4 w-4 text-yellow-300"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-						/>
-					</svg>
-
-					<svg
-						class="h-4 w-4 text-yellow-300"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-						/>
-					</svg>
-
-					<svg
-						class="h-4 w-4 text-yellow-300"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-						/>
-					</svg>
-
-					<svg
-						class="h-4 w-4 text-yellow-300"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-						/>
-					</svg>
+					<div class="space-y-0.5">
+						<p class="text-base font-semibold text-gray-900 dark:text-white">Micheal Gough</p>
+						<p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+							{new Date(review.createdDate).toLocaleDateString('en-US', {
+								month: 'long',
+								year: 'numeric',
+								day: 'numeric'
+							})} at {new Date(review.createdDate).toLocaleTimeString('en-US', {
+								hour: '2-digit',
+								minute: '2-digit'
+							})}
+						</p>
+					</div>
 				</div>
 
-				<div class="space-y-0.5">
-					<p class="text-base font-semibold text-gray-900 dark:text-white">Micheal Gough</p>
-					<p class="text-sm font-normal text-gray-500 dark:text-gray-400">
-						November 18 2023 at 15:35
+				<div class="mt-4 min-w-0 flex-1 space-y-4 sm:mt-0">
+					<p class="text-base font-normal text-gray-500 dark:text-gray-400">
+						{review.body}
 					</p>
 				</div>
 			</div>
-
-			<div class="mt-4 min-w-0 flex-1 space-y-4 sm:mt-0">
-				<p class="text-base font-normal text-gray-500 dark:text-gray-400">
-					My old IMAC was from 2013. This replacement was well needed. Very fast, and the colour
-					matches my office set up perfectly. The display is out of this world and I’m very happy
-					with this purchase.
-				</p>
-			</div>
-		</div>
-
-		<div class="gap-3 py-6 sm:flex sm:items-start">
-			<div class="shrink-0 space-y-2 sm:w-48 md:w-72">
-				<div class="flex items-center gap-0.5">
-					<svg
-						class="h-4 w-4 text-yellow-300"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-						/>
-					</svg>
-
-					<svg
-						class="h-4 w-4 text-yellow-300"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-						/>
-					</svg>
-
-					<svg
-						class="h-4 w-4 text-yellow-300"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-						/>
-					</svg>
-
-					<svg
-						class="h-4 w-4 text-yellow-300"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-						/>
-					</svg>
-
-					<svg
-						class="h-4 w-4 text-yellow-300"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-						/>
-					</svg>
-				</div>
-
-				<div class="space-y-0.5">
-					<p class="text-base font-semibold text-gray-900 dark:text-white">Jese Leos</p>
-					<p class="text-sm font-normal text-gray-500 dark:text-gray-400">
-						November 18 2023 at 15:35
-					</p>
-				</div>
-			</div>
-
-			<div class="mt-4 min-w-0 flex-1 space-y-4 sm:mt-0">
-				<p class="text-base font-normal text-gray-500 dark:text-gray-400">
-					It’s fancy, amazing keyboard, matching accessories. Super fast, batteries last more than
-					usual, everything runs perfect in this computer. Highly recommend!
-				</p>
-			</div>
-		</div>
+		{/each}
 	</div>
 </div>
 
