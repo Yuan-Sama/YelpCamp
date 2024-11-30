@@ -2,6 +2,7 @@ import { CampgroundMongoModel } from '$lib/server/campground/campground.model';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import mongoose from 'mongoose';
+import { ReviewMongoModel } from '$lib/server/review/review.model';
 
 export const load = (async ({ params }) => {
 	const campgrounds = await CampgroundMongoModel.aggregate([
@@ -31,7 +32,7 @@ export const load = (async ({ params }) => {
 						input: '$reviews',
 						as: 'review',
 						in: {
-							id: {
+							_id: {
 								$toString: '$$review._id'
 							},
 							body: '$$review.body',
@@ -57,5 +58,17 @@ export const actions = {
 		const { id } = params;
 		await CampgroundMongoModel.findByIdAndDelete(id);
 		redirect(303, '/campgrounds');
+	},
+	deleteComment: async ({ request }) => {
+		const formData = await request.formData();
+		const { campgroundId, reviewId } = Object.fromEntries(formData) as {
+			campgroundId: string;
+			reviewId: string;
+		};
+
+		await CampgroundMongoModel.findByIdAndUpdate(campgroundId, { $pull: { reviews: reviewId } });
+		await ReviewMongoModel.findByIdAndDelete(reviewId);
+
+		redirect(303, `/campgrounds/${campgroundId}`);
 	}
 } satisfies Actions;

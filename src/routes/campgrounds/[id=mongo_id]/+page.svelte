@@ -289,17 +289,22 @@
 				<button
 					type="submit"
 					class="me-2 inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-					>Submit</button
+					>Post review</button
 				>
 			</div>
 		</form>
 	</div>
 
-	<div class="mt-10 divide-y divide-gray-200 dark:divide-gray-700" id="reviews">
-		{#each $state.snapshot(reviews) as review}
-			<div class="gap-3 py-6 sm:flex sm:items-start">
-				<div class="shrink-0 space-y-2 sm:w-48 md:w-72">
-					<!-- <div class="flex items-center gap-0.5">
+	<div
+		class="mx-auto mt-10 max-w-screen-md divide-y divide-gray-200 px-4 dark:divide-gray-700"
+		id="reviews"
+	>
+		{#each reviews as review}
+			{@const createdDate = new Date(review.createdDate)}
+			<article class="rounded-lg bg-white p-6 text-base dark:bg-gray-900">
+				<footer class="mb-2 flex items-center justify-between">
+					<div class="flex items-center">
+						<!-- <div class="flex items-center gap-0.5 mr-3">
 							 <svg
 								 class="h-4 w-4 text-yellow-300"
 								 aria-hidden="true"
@@ -370,44 +375,77 @@
 								 />
 							 </svg>
 						 </div> -->
-					<div class="flex items-center gap-0.5">
-						{review.rating}
-						<svg
-							class="h-4 w-4 text-yellow-300"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							fill="currentColor"
-							viewBox="0 0 24 24"
+						<div class="mr-3 flex items-center gap-0.5">
+							{review.rating}
+							<svg
+								class="h-4 w-4 text-yellow-300"
+								aria-hidden="true"
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								fill="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
+								/>
+							</svg>
+						</div>
+						<p
+							class="mr-3 inline-flex items-center text-sm font-semibold text-gray-900 dark:text-white"
 						>
-							<path
-								d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-							/>
-						</svg>
-					</div>
-
-					<div class="space-y-0.5">
-						<p class="text-base font-semibold text-gray-900 dark:text-white">Micheal Gough</p>
-						<p class="text-sm font-normal text-gray-500 dark:text-gray-400">
-							{new Date(review.createdDate).toLocaleDateString('en-US', {
-								month: 'long',
-								year: 'numeric',
-								day: 'numeric'
-							})} at {new Date(review.createdDate).toLocaleTimeString('en-US', {
-								hour: '2-digit',
-								minute: '2-digit'
-							})}
+							Michael Gough
+						</p>
+						<p class="text-sm text-gray-600 dark:text-gray-400">
+							<time
+								datetime={createdDate.toLocaleDateString('en-US', {
+									month: 'long',
+									year: 'numeric',
+									day: 'numeric',
+									hour: 'numeric',
+									minute: 'numeric'
+								})}
+								title={createdDate.toLocaleDateString('en-US', {
+									month: 'long',
+									year: 'numeric',
+									day: 'numeric'
+								})}
+								>{createdDate.toLocaleDateString('en-US', {
+									month: 'short',
+									year: 'numeric',
+									day: 'numeric'
+								})}</time
+							>
 						</p>
 					</div>
-				</div>
-
-				<div class="mt-4 min-w-0 flex-1 space-y-4 sm:mt-0">
-					<p class="text-base font-normal text-gray-500 dark:text-gray-400">
-						{review.body}
-					</p>
-				</div>
-			</div>
+					<form action="?/deleteComment" method="post">
+						<input type="hidden" name="campgroundId" value={campground._id} />
+						<input type="hidden" name="reviewId" value={review._id} />
+						<button
+							class="rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+							type="submit"
+							title="Delete"
+						>
+							<svg
+								aria-hidden="true"
+								class="h-5 w-5"
+								fill="currentColor"
+								viewBox="0 0 20 20"
+								xmlns="http://www.w3.org/2000/svg"
+								><path
+									fill-rule="evenodd"
+									d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+									clip-rule="evenodd"
+								></path></svg
+							>
+							<span class="sr-only">Delete</span>
+						</button>
+					</form>
+				</footer>
+				<p class="text-gray-500 dark:text-gray-400 whitespace-pre-wrap">
+					{review.body}
+				</p>
+			</article>
 		{/each}
 	</div>
 </div>

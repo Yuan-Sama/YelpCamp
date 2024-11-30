@@ -54,7 +54,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
 						input: '$reviews',
 						as: 'review',
 						in: {
-							id: {
+							_id: {
 								$toString: '$$review._id'
 							},
 							body: '$$review.body',
