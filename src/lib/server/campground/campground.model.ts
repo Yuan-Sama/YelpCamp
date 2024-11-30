@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import mongoose, { Model, model, Schema } from 'mongoose';
+import { ReviewMongoModel } from '../review/review.model';
 
 const campgroundSchema = new Schema<Campground>({
 	title: { type: String },
@@ -13,6 +14,16 @@ const campgroundSchema = new Schema<Campground>({
 			ref: 'Review'
 		}
 	]
+});
+
+campgroundSchema.post('findOneAndDelete', async function (doc) {
+	if (doc) {
+		await ReviewMongoModel.deleteMany({
+			_id: {
+				$in: doc.reviews
+			}
+		});
+	}
 });
 
 export const CampgroundMongoModel =
