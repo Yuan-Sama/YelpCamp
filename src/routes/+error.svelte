@@ -1,11 +1,11 @@
 <script>
 	import Logo from '$assets/logo.png';
 	import { page } from '$app/stores';
-	import { APP_NAME } from '$lib';
+	import { AppName } from '$lib';
 </script>
 
 <svelte:head>
-	<title>{APP_NAME} - {$page.status}</title>
+	<title>{AppName} - {$page.status}</title>
 	<link rel="shortcut icon" href={Logo} type="image/png" />
 </svelte:head>
 

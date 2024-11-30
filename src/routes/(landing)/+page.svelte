@@ -1,10 +1,10 @@
 <script>
 	import Background from '$assets/background.jpg';
-	import { APP_NAME } from '$lib';
+	import { AppName } from '$lib';
 </script>
 
 <svelte:head>
-	<title>{APP_NAME} - Enjoy moment with your family, friends and people you love</title>
+	<title>{AppName} - Enjoy moment with your family, friends and people you love</title>
 </svelte:head>
 
 <div
@@ -12,7 +12,7 @@
 	style="background-image: url({Background});"
 >
 	<div class="mb-16 flex flex-col text-center">
-		<h1 class="my-10 text-7xl">{APP_NAME}</h1>
+		<h1 class="my-10 text-7xl">{AppName}</h1>
 		<p class="text-md my-3 font-semibold text-gray-200 dark:text-neutral-400">
 			Enjoy moment with your family, friends and people you love.
 		</p>

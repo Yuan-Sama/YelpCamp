@@ -2,7 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import type { LayoutData } from './$types';
 	import Logo from '$assets/logo.png';
-	import { APP_NAME } from '$lib';
+	import { AppName } from '$lib';
 	import { tweened } from 'svelte/motion';
 	import { expoInOut } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
@@ -105,7 +105,7 @@
 			class="flex items-center justify-center text-2xl font-semibold text-gray-900 dark:text-white"
 		>
 			<img class="mr-2 max-w-10" src={Logo} alt="Logo" />
-			{APP_NAME}
+			{AppName}
 		</a>
 		<p class="my-6 text-gray-500 dark:text-gray-400">
 			A campground is where we gather to weave memories beneath constellations, forging bonds as
@@ -120,7 +120,7 @@
 			</li>
 		</ul>
 		<span class="text-sm text-gray-500 dark:text-gray-400 sm:text-center"
-			>© {new Date().getFullYear()} <a href="/" class="hover:underline">{APP_NAME}</a>. All Rights
+			>© {new Date().getFullYear()} <a href="/" class="hover:underline">{AppName}</a>. All Rights
 			Reserved.</span
 		>
 	</div>

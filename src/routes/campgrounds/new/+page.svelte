@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { APP_NAME } from '$lib';
+	import { AppName } from '$lib';
 	import type { ActionData } from './$types';
 
 	let { form }: { form: ActionData } = $props();
@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-	<title>{APP_NAME} - New Campground</title>
+	<title>{AppName} - New Campground</title>
 </svelte:head>
 
 <div class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">

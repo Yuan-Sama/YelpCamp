@@ -1,4 +1,4 @@
-export const APP_NAME = 'YelpCamp';
+export const AppName = 'YelpCamp';
 
 export function readMore(text: string | undefined | null, length = 255) {
 	if (!text) return '';

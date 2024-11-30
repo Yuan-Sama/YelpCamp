@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Modal from '$components/Modal.svelte';
-	import { APP_NAME, formatAsCurrency } from '$lib';
+	import { AppName, formatAsCurrency } from '$lib';
 	import { submitReview } from '$lib/review';
 	import type { PageData } from './$types';
 
@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-	<title>{APP_NAME} - Campground: {campground.title}</title>
+	<title>{AppName} - Campground: {campground.title}</title>
 </svelte:head>
 
 <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">

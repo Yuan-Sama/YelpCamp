@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { APP_NAME, formatAsCurrency, readMore } from '$lib';
+	import { AppName, formatAsCurrency, readMore } from '$lib';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>{APP_NAME} - All campgrounds</title>
+	<title>{AppName} - All campgrounds</title>
 </svelte:head>
 
 <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
