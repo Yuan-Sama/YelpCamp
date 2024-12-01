@@ -1,11 +1,11 @@
-import { CampgroundMongoModel } from '$lib/server/campground/campground.model';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import mongoose from 'mongoose';
-import { ReviewMongoModel } from '$lib/server/review/review.model';
+import { Campground } from '$lib/server/campground';
+import { Review } from '$lib/server/review';
 
 export const load = (async ({ params }) => {
-	const campgrounds = await CampgroundMongoModel.aggregate([
+	const campgrounds = await Campground.aggregate([
 		{
 			$match: {
 				_id: new mongoose.Types.ObjectId(params.id)
@@ -56,7 +56,7 @@ export const load = (async ({ params }) => {
 export const actions = {
 	delete: async ({ params }) => {
 		const { id } = params;
-		await CampgroundMongoModel.findByIdAndDelete(id);
+		await Campground.findByIdAndDelete(id);
 		redirect(303, '/campgrounds');
 	},
 	deleteComment: async ({ request }) => {
@@ -66,8 +66,8 @@ export const actions = {
 			reviewId: string;
 		};
 
-		await CampgroundMongoModel.findByIdAndUpdate(campgroundId, { $pull: { reviews: reviewId } });
-		await ReviewMongoModel.findByIdAndDelete(reviewId);
+		await Campground.findByIdAndUpdate(campgroundId, { $pull: { reviews: reviewId } });
+		await Review.findByIdAndDelete(reviewId);
 
 		redirect(303, `/campgrounds/${campgroundId}`);
 	}

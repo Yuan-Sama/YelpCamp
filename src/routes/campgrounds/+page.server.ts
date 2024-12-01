@@ -1,4 +1,4 @@
-import { CampgroundMongoModel } from '$lib/server/campground/campground.model';
+import { Campground } from '$lib/server/campground';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {
@@ -9,7 +9,7 @@ export const load = (async () => {
 		description: string;
 		location: string;
 		image: string;
-	}[] = await CampgroundMongoModel.aggregate([
+	}[] = await Campground.aggregate([
 		{
 			$project: {
 				_id: {

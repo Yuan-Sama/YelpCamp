@@ -1,13 +1,10 @@
-import {
-	CampgroundMongoModel,
-	campgroundRequestValidator
-} from '$lib/server/campground/campground.model';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { convertToValidationErrors } from '$lib/server';
+import { Campground, campgroundRequestValidator } from '$lib/server/campground';
 
 export const load = (async ({ params }) => {
-	const campground = await CampgroundMongoModel.findById(params.id, {
+	const campground = await Campground.findById(params.id, {
 		_id: { $toString: '$_id' },
 		title: 1,
 		price: 1,
@@ -48,7 +45,7 @@ export const actions = {
 			return fail(400, { errors });
 		}
 
-		const campground = await CampgroundMongoModel.findByIdAndUpdate(id, updateCampground);
+		const campground = await Campground.findByIdAndUpdate(id, updateCampground);
 
 		redirect(303, `/campgrounds/${campground?._id}`);
 	}

@@ -1,8 +1,8 @@
 import { convertToValidationErrors } from '$lib/server';
-import { CampgroundMongoModel } from '$lib/server/campground/campground.model';
-import { ReviewMongoModel, reviewRequestValidator } from '$lib/server/review/review.model';
 import mongoose from 'mongoose';
 import type { RequestHandler } from './$types';
+import { Review, reviewRequestValidator, type ReviewRequestModel } from '$lib/server/review';
+import { Campground } from '$lib/server/campground';
 
 export const POST: RequestHandler = async ({ request, params }) => {
 	const body: ReviewRequestModel = await request.json();
@@ -19,15 +19,15 @@ export const POST: RequestHandler = async ({ request, params }) => {
 		});
 	}
 
-	const review = new ReviewMongoModel(body);
-	const campground = await CampgroundMongoModel.findById(params.id);
+	const review = new Review(body);
+	const campground = await Campground.findById(params.id);
 
 	campground?.reviews.push(review);
 
 	await review.save();
 	await campground?.save();
 
-	const campgrounds = await CampgroundMongoModel.aggregate([
+	const campgrounds = await Campground.aggregate([
 		{
 			$match: {
 				_id: new mongoose.Types.ObjectId(params.id)

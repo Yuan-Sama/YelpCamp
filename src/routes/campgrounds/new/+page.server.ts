@@ -1,9 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import {
-	CampgroundMongoModel,
-	campgroundRequestValidator
-} from '$lib/server/campground/campground.model';
+import { Campground, campgroundRequestValidator } from '$lib/server/campground';
+import { convertToValidationErrors } from '$lib/server';
 
 export const actions = {
 	default: async ({ request }) => {
@@ -15,9 +13,7 @@ export const actions = {
 		});
 
 		if (err) {
-			const validationErrors = err.details
-				.map((e) => ({ [e.path.join('.')]: e.message }))
-				.reduce((prev, next) => Object.assign(next, prev), {});
+			const validationErrors = convertToValidationErrors(err);
 
 			const errors = Object.keys(newCampground)
 				.map((k) => {
@@ -33,7 +29,7 @@ export const actions = {
 			return fail(400, { errors });
 		}
 
-		const campground = new CampgroundMongoModel(newCampground);
+		const campground = new Campground(newCampground);
 		await campground.save();
 		redirect(303, `/campgrounds/${campground._id}`);
 	}
