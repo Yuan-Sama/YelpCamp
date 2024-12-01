@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 import cities from './cities.js';
 import { places, descriptors } from './seedHelpers.js';
-import { CampgroundMongoModel } from '../src/lib/server/campground/campground.model';
+import { Campground } from '../src/lib/server/campground.ts';
 
 (async () => {
 	try {
 		console.log(process.env.MONGO_URL);
-		await mongoose.connect(process.env.MONGO_URL!);
+		await mongoose.connect(process.env.MONGO_URL);
 	} catch (error) {
 		console.error.bind(console, 'Connection error:', error);
 	}
@@ -15,11 +15,11 @@ import { CampgroundMongoModel } from '../src/lib/server/campground/campground.mo
 const sample = (/**@type {string[]} */ array) => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
-	await CampgroundMongoModel.deleteMany({});
+	await Campground.deleteMany({});
 	for (let i = 0; i < 50; i++) {
 		const random1000 = Math.floor(Math.random() * 1000);
 		const price = Math.floor(Math.random() * 20) + 10;
-		const camp = new CampgroundMongoModel({
+		const camp = new Campground({
 			// @ts-ignore
 			location: `${cities[random1000].city}, ${cities[random1000].state}`,
 			title: `${sample(descriptors)} ${sample(places)}`,

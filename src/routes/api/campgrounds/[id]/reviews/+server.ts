@@ -1,13 +1,21 @@
 import { convertToValidationErrors } from '$lib/server';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import type { RequestHandler } from './$types';
-import { Review, reviewRequestValidator, type ReviewRequestModel } from '$lib/server/review';
+import { Review, reviewRequestValidator } from '$lib/server/review';
 import { Campground } from '$lib/server/campground';
 
 export const POST: RequestHandler = async ({ request, params }) => {
-	const body: ReviewRequestModel = await request.json();
+	if (!Types.ObjectId.isValid(params.id))
+		return new Response(
+			JSON.stringify({
+				message: 'Campground not found'
+			}),
+			{
+				status: 404
+			}
+		);
 
-	const { error: err } = reviewRequestValidator.validate(body, {
+	const { error: err, value } = reviewRequestValidator.validate(await request.json(), {
 		abortEarly: false
 	});
 
@@ -19,7 +27,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
 		});
 	}
 
-	const review = new Review(body);
+	const review = new Review(value);
 	const campground = await Campground.findById(params.id);
 
 	campground?.reviews.push(review);
